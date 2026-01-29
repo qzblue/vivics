@@ -771,6 +771,140 @@
       justify-content: flex-end;
     }
 
+    /* 現代專業模板 */
+    .modern-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, rgba(63, 109, 246, 0.12), rgba(255, 255, 255, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      margin-bottom: 14px;
+    }
+
+    .modern-header .modern-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modern-header .modern-avatar img.js-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      display: none;
+    }
+
+    .modern-header .modern-meta {
+      display: grid;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .modern-name {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .modern-title {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .modern-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .modern-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .modern-grid {
+        grid-template-columns: 1.1fr 1fr;
+      }
+    }
+
+    .modern-card {
+      border-radius: 18px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.96);
+      padding: 14px 16px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    /* 創意強調模板 */
+    .creative-header {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 179, 71, 0.2), rgba(99, 102, 241, 0.18));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .creative-name {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .creative-title {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .creative-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .creative-tag {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed rgba(99, 102, 241, 0.5);
+      color: #4c1d95;
+    }
+
+    .creative-columns {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px) {
+      .creative-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .creative-card {
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
     /* 插入圖片預設樣式 */
     .inserted-image {
       max-width: 100%;
@@ -805,6 +939,8 @@
       <select id="templateSelect">
         <option value="teacher">教師風格（側欄 + 時間軸）</option>
         <option value="simple">極簡風格（單欄）</option>
+        <option value="modern">現代專業（雙欄卡片）</option>
+        <option value="creative">創意強調（色塊卡片）</option>
       </select>
 
       <button id="toggleEdit">編輯模式</button>
@@ -1282,6 +1418,158 @@
                 </ul>
               </div>
             </section>
+          </div>
+        `,
+        modern: `
+          <div class="section-main" data-block>
+            <header class="modern-header">
+              <div class="modern-avatar js-avatar">
+                <img class="js-avatar-img" alt="頭像" />
+                <span class="js-avatar-initials">WY</span>
+              </div>
+              <div class="modern-meta">
+                <div class="modern-name">王宇宸</div>
+                <div class="modern-title">產品經理｜SaaS 成長策略｜使用者體驗</div>
+                <div class="modern-contact">
+                  <span>台北</span>
+                  <span>電話：+886 9xx xxx xxx</span>
+                  <span>電郵：example@mail.com</span>
+                  <span>LinkedIn：linkedin.com/in/example</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="modern-grid">
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">核心摘要</h2>
+                  <span class="section-main-sub">Summary</span>
+                </header>
+                <div class="section-body">
+                  <p>8 年 SaaS 產品與成長策略經驗，專注於多端使用者旅程與轉換優化。擅長跨部門協作、數據驅動決策與 MVP 策略落地。</p>
+                  <div class="skill-tags">
+                    <span class="skill-tag">產品策略</span>
+                    <span class="skill-tag">成長實驗</span>
+                    <span class="skill-tag">數據分析</span>
+                    <span class="skill-tag">跨部門協作</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">工作經驗</h2>
+                  <span class="section-main-sub">Experience</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>資深產品經理｜CloudFlow｜2021 – 目前</strong></p>
+                  <ul class="bullet-list">
+                    <li>建立 B2B SaaS onboarding 流程，轉換率提升 22%。</li>
+                    <li>導入自動化用戶分群，客戶留存率提升 15%。</li>
+                  </ul>
+                  <p><strong>產品經理｜NovaTech｜2017 – 2021</strong></p>
+                  <ul class="bullet-list">
+                    <li>主導行動端改版，NPS 提升 18 分。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">重點專案</h2>
+                  <span class="section-main-sub">Projects</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>企業工作流自動化平台</strong></p>
+                  <ul class="bullet-list">
+                    <li>以使用者訪談 + JTBD 梳理功能優先順序。</li>
+                    <li>推出模板市場，帶動 30% 付費轉化。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">教育背景</h2>
+                  <span class="section-main-sub">Education</span>
+                </header>
+                <div class="section-body">
+                  <ul class="bullet-list">
+                    <li><strong>國立台灣大學</strong> — 工業工程學士｜2013 – 2017</li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+          </div>
+        `,
+        creative: `
+          <div class="section-main" data-block>
+            <header class="creative-header">
+              <div class="creative-name">林思瑜</div>
+              <div class="creative-title">品牌設計師｜視覺識別｜包裝設計</div>
+              <div class="creative-tags">
+                <span class="creative-tag">品牌策略</span>
+                <span class="creative-tag">視覺識別</span>
+                <span class="creative-tag">包裝設計</span>
+                <span class="creative-tag">插畫</span>
+              </div>
+            </header>
+
+            <div class="creative-columns">
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">個人概覽</h2>
+                  <span class="section-main-sub">Profile</span>
+                </header>
+                <div class="section-body">
+                  <p>擁有 6 年品牌與包裝設計經驗，擅長將品牌故事轉化為具辨識度的視覺語言，服務涵蓋 FMCG、生活風格與新創品牌。</p>
+                  <p class="note">作品集：behance.net/example</p>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">代表作品</h2>
+                  <span class="section-main-sub">Selected Works</span>
+                </header>
+                <div class="section-body">
+                  <ul class="bullet-list">
+                    <li>為新創咖啡品牌設計全套品牌識別與包裝系統。</li>
+                    <li>打造生活風格品牌季節性主視覺，線上轉換提升 28%。</li>
+                    <li>協助美妝品牌進行產品線重塑，客戶滿意度提升。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">工作經歷</h2>
+                  <span class="section-main-sub">Experience</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>品牌設計師｜Studio A｜2020 – 目前</strong></p>
+                  <ul class="bullet-list">
+                    <li>主導品牌視覺識別專案，協助 20+ 客戶完成品牌升級。</li>
+                    <li>跨團隊協作推動行銷素材一致性，提升品牌辨識度。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">技能與工具</h2>
+                  <span class="section-main-sub">Skills</span>
+                </header>
+                <div class="section-body">
+                  <div class="skill-tags">
+                    <span class="skill-tag">Adobe CC</span>
+                    <span class="skill-tag">Figma</span>
+                    <span class="skill-tag">品牌策略</span>
+                    <span class="skill-tag">插畫</span>
+                  </div>
+                </div>
+              </section>
+            </div>
           </div>
         `
       };
