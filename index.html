@@ -2028,10 +2028,22 @@
 
       async function fetchJSON(url, options = {}) {
         const res = await fetch(url, options);
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
+        const text = await res.text();
+        let data = null;
+        if (text) {
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            data = null;
+          }
         }
-        return res.json();
+        if (!res.ok) {
+          const error = new Error('Network response was not ok');
+          error.status = res.status;
+          error.payload = data;
+          throw error;
+        }
+        return data ?? {};
       }
 
       function collectTheme() {
@@ -2132,9 +2144,18 @@
 
       async function loadVersion(versionId) {
         if (!versionId) return;
-        const data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        let data = null;
+        try {
+          data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        } catch (error) {
+          if (error?.status === 404) {
+            showStatus('指定版本不存在，將嘗試載入最新版本。');
+            return false;
+          }
+          throw error;
+        }
         const version = data.version;
-        if (!version) return;
+        if (!version) return false;
         currentResumeId = version.resume_id;
         currentVersionId = version.id;
         applyLayoutHtml(version.html_content, version.template_id);
@@ -2162,6 +2183,7 @@
           applyAvatarToDOM(null);
         }
         showStatus('已載入伺服器版本。');
+        return true;
       }
 
       async function saveActiveVersion({ createNew = false, label = '' } = {}) {
@@ -2263,7 +2285,15 @@
           if (preferredVersion) {
             currentVersionId = preferredVersion;
             versionSelect.value = String(preferredVersion);
-            await loadVersion(preferredVersion);
+            const loaded = await loadVersion(preferredVersion);
+            if (!loaded && versions.length) {
+              const fallbackVersion = versions[0]?.id;
+              if (fallbackVersion) {
+                currentVersionId = fallbackVersion;
+                versionSelect.value = String(fallbackVersion);
+                await loadVersion(fallbackVersion);
+              }
+            }
           }
           await loadStylePresets(currentResumeId);
         } catch (e) {
