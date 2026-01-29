@@ -18,14 +18,7 @@ mysql -u root -p -e "CREATE DATABASE resume_app CHARACTER SET utf8mb4 COLLATE ut
 mysql -u root -p resume_app < db/schema.sql
 ```
 
-2. 設定資料庫連線參數（使用環境變數）：
-
-```bash
-export DB_HOST=127.0.0.1
-export DB_NAME=resume_app
-export DB_USER=root
-export DB_PASS=your_password
-```
+2. 設定資料庫連線參數（直接編輯 `api/config.php`）：
 
 3. 啟動 PHP 內建伺服器：
 
@@ -38,6 +31,6 @@ php -S 0.0.0.0:8000
 ## API 檔案
 
 - `api.php`：後端 API 入口
-- `api/config.php`：環境變數設定
+- `api/config.php`：資料庫連線設定
 - `api/bootstrap.php`：PDO 連線與共用工具
 - `db/schema.sql`：資料庫 schema 定義
