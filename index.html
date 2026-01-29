@@ -150,6 +150,16 @@
       box-shadow: 0 4px 10px rgba(248, 113, 113, 0.4);
     }
 
+    .status-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(239, 246, 255, 0.9);
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
     .toolbar button.editing {
       background: #ffffff;
       color: #111827;
@@ -806,6 +816,23 @@
     </div>
 
     <div class="toolbar-row">
+      <label for="resumeSelect">履歷：</label>
+      <select id="resumeSelect"></select>
+      <button id="newResumeBtn" class="secondary">新增履歷</button>
+
+      <label for="versionSelect">版本：</label>
+      <select id="versionSelect"></select>
+      <button id="newVersionBtn" class="secondary">另存新版本</button>
+      <button id="saveVersionBtn" class="secondary">保存到伺服器</button>
+      <button id="deleteVersionBtn" class="danger">刪除版本</button>
+
+      <label for="stylePresetSelect">樣式：</label>
+      <select id="stylePresetSelect"></select>
+      <button id="saveStylePresetBtn" class="secondary">保存樣式</button>
+      <span class="status-badge" id="backendStatus">後端連線中...</span>
+    </div>
+
+    <div class="toolbar-row">
       <div class="font-input">
         <label for="fontSizeSelect">字體大小</label>
         <select id="fontSizeSelect">
@@ -859,6 +886,7 @@
       const KEY_THEME = STORAGE_PREFIX + 'theme';
       const KEY_FONT = STORAGE_PREFIX + 'font';
       const KEY_AVATAR = STORAGE_PREFIX + 'avatar';
+      const API_URL = 'api.php';
 
       const layoutRoot = document.getElementById('layoutRoot');
       const templateSelect = document.getElementById('templateSelect');
@@ -883,6 +911,12 @@
       let editMode = false;
       let printMode = false;
       let autosaveTimer = null;
+      let backendAvailable = false;
+      let currentResumeId = null;
+      let currentVersionId = null;
+      let currentAvatarData = null;
+      let resumeIndex = new Map();
+      let stylePresets = [];
 
       const templates = {
         teacher: `
@@ -1252,6 +1286,260 @@
         `
       };
 
+      function setBackendStatus(available, message) {
+        backendAvailable = available;
+        if (available) {
+          backendStatus.textContent = message || '後端已連線';
+          backendStatus.style.background = 'rgba(236, 253, 245, 0.9)';
+          backendStatus.style.borderColor = 'rgba(110, 231, 183, 0.8)';
+          backendStatus.style.color = '#047857';
+        } else {
+          backendStatus.textContent = message || '離線模式（本機保存）';
+          backendStatus.style.background = 'rgba(254, 242, 242, 0.95)';
+          backendStatus.style.borderColor = 'rgba(248, 113, 113, 0.6)';
+          backendStatus.style.color = '#b91c1c';
+        }
+      }
+
+      async function fetchJSON(url, options = {}) {
+        const res = await fetch(url, options);
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      }
+
+      function collectTheme() {
+        return {
+          primary: primaryColorInput.value,
+          accent: accentColorInput.value,
+          bg: bgColorInput.value
+        };
+      }
+
+      function collectFontSettings() {
+        return {
+          size: fontSizeSelect.value,
+          family: fontFamilySelect.value
+        };
+      }
+
+      function renderResumeOptions(resumes) {
+        resumeIndex = new Map();
+        resumeSelect.innerHTML = '';
+        resumes.forEach(resume => {
+          resumeIndex.set(String(resume.id), resume);
+          const option = document.createElement('option');
+          option.value = resume.id;
+          option.textContent = resume.name;
+          resumeSelect.appendChild(option);
+        });
+      }
+
+      function renderVersionOptions(versions) {
+        versionSelect.innerHTML = '';
+        versions.forEach(version => {
+          const option = document.createElement('option');
+          option.value = version.id;
+          option.textContent = version.label;
+          versionSelect.appendChild(option);
+        });
+      }
+
+      function renderStylePresetOptions(presets) {
+        stylePresetSelect.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '套用樣式...';
+        stylePresetSelect.appendChild(defaultOption);
+        presets.forEach(preset => {
+          const option = document.createElement('option');
+          option.value = preset.id;
+          option.textContent = preset.name;
+          stylePresetSelect.appendChild(option);
+        });
+      }
+
+      async function loadResumes() {
+        const data = await fetchJSON(`${API_URL}?action=list_resumes`);
+        const resumes = data.resumes || [];
+        renderResumeOptions(resumes);
+        return resumes;
+      }
+
+      async function createResume(name, useCurrentLayout = false) {
+        const templateId = templateSelect.value;
+        const html = useCurrentLayout ? layoutRoot.innerHTML : templates[templateId];
+        const payload = new URLSearchParams({
+          action: 'create_resume',
+          name,
+          template_id: templateId,
+          html,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings()),
+          avatar_data: currentAvatarData || '',
+          version_label: '初始版本'
+        });
+        const data = await fetchJSON(API_URL, {
+          method: 'POST',
+          body: payload
+        });
+        currentResumeId = data.resume_id;
+        currentVersionId = data.version_id;
+        return data;
+      }
+
+      async function loadVersions(resumeId) {
+        if (!resumeId) return [];
+        const data = await fetchJSON(`${API_URL}?action=list_versions&resume_id=${resumeId}`);
+        const versions = data.versions || [];
+        renderVersionOptions(versions);
+        return versions;
+      }
+
+      function applyLayoutHtml(html, templateId) {
+        layoutRoot.innerHTML = html || templates[templateId] || '';
+        templateSelect.value = templateId || 'teacher';
+        localStorage.setItem(KEY_ACTIVE_TEMPLATE, templateSelect.value);
+        if (editMode) attachDeleteButtons();
+      }
+
+      async function loadVersion(versionId) {
+        if (!versionId) return;
+        const data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        const version = data.version;
+        if (!version) return;
+        currentResumeId = version.resume_id;
+        currentVersionId = version.id;
+        applyLayoutHtml(version.html_content, version.template_id);
+        if (version.theme_json) {
+          try {
+            applyTheme(JSON.parse(version.theme_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (version.font_json) {
+          try {
+            applyFontSettings(JSON.parse(version.font_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (version.avatar_data) {
+          currentAvatarData = version.avatar_data;
+          localStorage.setItem(KEY_AVATAR, version.avatar_data);
+          applyAvatarToDOM(version.avatar_data);
+        } else {
+          currentAvatarData = null;
+          localStorage.removeItem(KEY_AVATAR);
+          applyAvatarToDOM(null);
+        }
+        showStatus('已載入伺服器版本。');
+      }
+
+      async function saveActiveVersion({ createNew = false, label = '' } = {}) {
+        if (!backendAvailable || !currentResumeId) return;
+        const payload = new URLSearchParams({
+          action: 'save_version',
+          resume_id: currentResumeId,
+          version_id: createNew ? '' : (currentVersionId || ''),
+          label: label || (versionSelect.selectedOptions[0]?.textContent ?? '更新版本'),
+          template_id: templateSelect.value,
+          html: layoutRoot.innerHTML,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings()),
+          avatar_data: currentAvatarData || ''
+        });
+        const data = await fetchJSON(API_URL, {
+          method: 'POST',
+          body: payload
+        });
+        currentVersionId = data.version_id || currentVersionId;
+        if (createNew) {
+          await loadVersions(currentResumeId);
+          versionSelect.value = currentVersionId;
+        }
+        showStatus('已同步保存至伺服器。');
+      }
+
+      async function loadStylePresets(resumeId) {
+        if (!resumeId) return [];
+        const data = await fetchJSON(`${API_URL}?action=list_style_presets&resume_id=${resumeId}`);
+        stylePresets = data.presets || [];
+        renderStylePresetOptions(stylePresets);
+        return stylePresets;
+      }
+
+      async function saveStylePreset() {
+        if (!backendAvailable || !currentResumeId) return;
+        const name = prompt('輸入樣式名稱（例如：藍色專業版）');
+        if (!name) return;
+        const payload = new URLSearchParams({
+          action: 'save_style_preset',
+          resume_id: currentResumeId,
+          name,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings())
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        await loadStylePresets(currentResumeId);
+        showStatus('樣式已保存，可在下拉選單中套用。');
+      }
+
+      function applyStylePreset(presetId) {
+        const preset = stylePresets.find(item => String(item.id) === String(presetId));
+        if (!preset) return;
+        if (preset.theme_json) {
+          try {
+            applyTheme(JSON.parse(preset.theme_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (preset.font_json) {
+          try {
+            applyFontSettings(JSON.parse(preset.font_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        showStatus('樣式已套用。');
+      }
+
+      async function initBackend() {
+        try {
+          await fetchJSON(`${API_URL}?action=health`);
+          setBackendStatus(true);
+        } catch (e) {
+          setBackendStatus(false);
+          return;
+        }
+
+        try {
+          const resumes = await loadResumes();
+          if (!resumes.length) {
+            await createResume('我的履歷', false);
+          } else {
+            const activeResume = resumes[0];
+            currentResumeId = activeResume.id;
+            resumeSelect.value = String(activeResume.id);
+          }
+          const versions = await loadVersions(currentResumeId);
+          const resumeRecord = resumeIndex.get(String(currentResumeId));
+          const preferredVersion = resumeRecord?.active_version_id || versions[0]?.id;
+          if (preferredVersion) {
+            currentVersionId = preferredVersion;
+            versionSelect.value = String(preferredVersion);
+            await loadVersion(preferredVersion);
+          }
+          await loadStylePresets(currentResumeId);
+        } catch (e) {
+          console.error(e);
+          setBackendStatus(false, '後端連線失敗，已切換本機保存');
+        }
+      }
+
       function getLayoutKey(templateId) {
         return STORAGE_PREFIX + 'layout_' + templateId;
       }
@@ -1290,6 +1578,9 @@
         };
         localStorage.setItem(KEY_THEME, JSON.stringify(theme));
         showStatus('顏色主題已保存。');
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadTheme() {
@@ -1319,6 +1610,9 @@
         };
         localStorage.setItem(KEY_FONT, JSON.stringify(settings));
         showStatus('字體設定已保存。');
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadFontSettings() {
@@ -1381,6 +1675,9 @@
       function saveLayoutFor(templateId) {
         const key = getLayoutKey(templateId);
         localStorage.setItem(key, layoutRoot.innerHTML);
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadLayoutFor(templateId, resetToDefault = false) {
@@ -1388,6 +1685,7 @@
         const saved = resetToDefault ? null : localStorage.getItem(key);
         const html = saved || templates[templateId];
         layoutRoot.innerHTML = html;
+        templateSelect.value = templateId;
         if (editMode) attachDeleteButtons();
         applyAvatarFromStorage();
       }
@@ -1476,9 +1774,8 @@
 
       function applyAvatarFromStorage() {
         const dataUrl = localStorage.getItem(KEY_AVATAR);
-        if (dataUrl) {
-          applyAvatarToDOM(dataUrl);
-        }
+        currentAvatarData = dataUrl || null;
+        applyAvatarToDOM(dataUrl);
       }
 
       function handleAvatarFile(file) {
@@ -1486,9 +1783,13 @@
         const reader = new FileReader();
         reader.onload = e => {
           const dataUrl = e.target.result;
+          currentAvatarData = dataUrl;
           localStorage.setItem(KEY_AVATAR, dataUrl);
           applyAvatarToDOM(dataUrl);
           showStatus('頭像已更新並保存。');
+          if (backendAvailable) {
+            saveActiveVersion();
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -1564,6 +1865,82 @@
       templateSelect.addEventListener('change', () => {
         const id = templateSelect.value;
         setActiveTemplate(id, false);
+        if (backendAvailable) {
+          saveActiveVersion({ label: versionSelect.selectedOptions[0]?.textContent || '更新版本' });
+        }
+      });
+
+      resumeSelect.addEventListener('change', async () => {
+        if (!backendAvailable) return;
+        currentResumeId = resumeSelect.value;
+        const versions = await loadVersions(currentResumeId);
+        const resumeRecord = resumeIndex.get(String(currentResumeId));
+        const preferredVersion = resumeRecord?.active_version_id || versions[0]?.id;
+        if (preferredVersion) {
+          currentVersionId = preferredVersion;
+          versionSelect.value = String(preferredVersion);
+          await loadVersion(preferredVersion);
+          await loadStylePresets(currentResumeId);
+        }
+      });
+
+      versionSelect.addEventListener('change', async () => {
+        if (!backendAvailable) return;
+        currentVersionId = versionSelect.value;
+        await loadVersion(currentVersionId);
+      });
+
+      newResumeBtn.addEventListener('click', async () => {
+        if (!backendAvailable) return;
+        const name = prompt('輸入新履歷名稱');
+        if (!name) return;
+        const data = await createResume(name, true);
+        const resumes = await loadResumes();
+        resumeSelect.value = String(data.resume_id);
+        currentResumeId = data.resume_id;
+        const versions = await loadVersions(currentResumeId);
+        versionSelect.value = String(data.version_id);
+        currentVersionId = data.version_id;
+        await loadVersion(currentVersionId);
+        await loadStylePresets(currentResumeId);
+      });
+
+      newVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        const label = prompt('輸入新版本名稱');
+        if (!label) return;
+        await saveActiveVersion({ createNew: true, label });
+      });
+
+      saveVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        await saveActiveVersion();
+      });
+
+      deleteVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentVersionId) return;
+        if (!confirm('確定刪除這個版本？刪除後將無法復原。')) return;
+        const payload = new URLSearchParams({
+          action: 'delete_version',
+          version_id: currentVersionId
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        const versions = await loadVersions(currentResumeId);
+        const nextVersion = versions[0]?.id;
+        if (nextVersion) {
+          currentVersionId = nextVersion;
+          versionSelect.value = String(nextVersion);
+          await loadVersion(nextVersion);
+        }
+      });
+
+      saveStylePresetBtn.addEventListener('click', () => {
+        saveStylePreset();
+      });
+
+      stylePresetSelect.addEventListener('change', () => {
+        if (!backendAvailable) return;
+        applyStylePreset(stylePresetSelect.value);
       });
 
       [primaryColorInput, accentColorInput, bgColorInput].forEach(input => {
@@ -1658,6 +2035,8 @@
       setActiveTemplate(initialTemplate, false);
       setEditMode(true);
       setPrintMode(false);
+      setBackendStatus(false, '後端連線中...');
+      initBackend();
     });
   </script>
 </body>

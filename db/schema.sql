@@ -1,0 +1,36 @@
+CREATE TABLE resumes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  active_template VARCHAR(40) NOT NULL,
+  active_version_id INT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE resume_versions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  resume_id INT NOT NULL,
+  label VARCHAR(120) NOT NULL,
+  template_id VARCHAR(40) NOT NULL,
+  html_content LONGTEXT NOT NULL,
+  theme_json TEXT,
+  font_json TEXT,
+  avatar_data MEDIUMTEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_resume_versions_resume
+    FOREIGN KEY (resume_id) REFERENCES resumes(id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE style_presets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  resume_id INT NOT NULL,
+  name VARCHAR(120) NOT NULL,
+  theme_json TEXT,
+  font_json TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_style_presets_resume
+    FOREIGN KEY (resume_id) REFERENCES resumes(id)
+    ON DELETE CASCADE
+);
