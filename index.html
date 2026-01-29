@@ -150,6 +150,16 @@
       box-shadow: 0 4px 10px rgba(248, 113, 113, 0.4);
     }
 
+    .status-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(239, 246, 255, 0.9);
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
     .toolbar button.editing {
       background: #ffffff;
       color: #111827;
@@ -761,6 +771,140 @@
       justify-content: flex-end;
     }
 
+    /* 現代專業模板 */
+    .modern-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, rgba(63, 109, 246, 0.12), rgba(255, 255, 255, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      margin-bottom: 14px;
+    }
+
+    .modern-header .modern-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modern-header .modern-avatar img.js-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      display: none;
+    }
+
+    .modern-header .modern-meta {
+      display: grid;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .modern-name {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .modern-title {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .modern-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .modern-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .modern-grid {
+        grid-template-columns: 1.1fr 1fr;
+      }
+    }
+
+    .modern-card {
+      border-radius: 18px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.96);
+      padding: 14px 16px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    /* 創意強調模板 */
+    .creative-header {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 179, 71, 0.2), rgba(99, 102, 241, 0.18));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .creative-name {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .creative-title {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .creative-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .creative-tag {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed rgba(99, 102, 241, 0.5);
+      color: #4c1d95;
+    }
+
+    .creative-columns {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px) {
+      .creative-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .creative-card {
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
     /* 插入圖片預設樣式 */
     .inserted-image {
       max-width: 100%;
@@ -795,6 +939,8 @@
       <select id="templateSelect">
         <option value="teacher">教師風格（側欄 + 時間軸）</option>
         <option value="simple">極簡風格（單欄）</option>
+        <option value="modern">現代專業（雙欄卡片）</option>
+        <option value="creative">創意強調（色塊卡片）</option>
       </select>
 
       <button id="toggleEdit">編輯模式</button>
@@ -803,6 +949,23 @@
       <button id="printModeBtn" class="secondary">切換打印預覽模式</button>
       <button id="avatarBtn" class="secondary">設定頭像</button>
       <button id="insertImgBtn" class="secondary">插入圖片</button>
+    </div>
+
+    <div class="toolbar-row">
+      <label for="resumeSelect">履歷：</label>
+      <select id="resumeSelect"></select>
+      <button id="newResumeBtn" class="secondary">新增履歷</button>
+
+      <label for="versionSelect">版本：</label>
+      <select id="versionSelect"></select>
+      <button id="newVersionBtn" class="secondary">另存新版本</button>
+      <button id="saveVersionBtn" class="secondary">保存到伺服器</button>
+      <button id="deleteVersionBtn" class="danger">刪除版本</button>
+
+      <label for="stylePresetSelect">樣式：</label>
+      <select id="stylePresetSelect"></select>
+      <button id="saveStylePresetBtn" class="secondary">保存樣式</button>
+      <span class="status-badge" id="backendStatus">後端連線中...</span>
     </div>
 
     <div class="toolbar-row">
@@ -859,6 +1022,7 @@
       const KEY_THEME = STORAGE_PREFIX + 'theme';
       const KEY_FONT = STORAGE_PREFIX + 'font';
       const KEY_AVATAR = STORAGE_PREFIX + 'avatar';
+      const API_URL = 'api.php';
 
       const layoutRoot = document.getElementById('layoutRoot');
       const templateSelect = document.getElementById('templateSelect');
@@ -883,6 +1047,12 @@
       let editMode = false;
       let printMode = false;
       let autosaveTimer = null;
+      let backendAvailable = false;
+      let currentResumeId = null;
+      let currentVersionId = null;
+      let currentAvatarData = null;
+      let resumeIndex = new Map();
+      let stylePresets = [];
 
       const templates = {
         teacher: `
@@ -1249,8 +1419,414 @@
               </div>
             </section>
           </div>
+        `,
+        modern: `
+          <div class="section-main" data-block>
+            <header class="modern-header">
+              <div class="modern-avatar js-avatar">
+                <img class="js-avatar-img" alt="頭像" />
+                <span class="js-avatar-initials">WY</span>
+              </div>
+              <div class="modern-meta">
+                <div class="modern-name">王宇宸</div>
+                <div class="modern-title">產品經理｜SaaS 成長策略｜使用者體驗</div>
+                <div class="modern-contact">
+                  <span>台北</span>
+                  <span>電話：+886 9xx xxx xxx</span>
+                  <span>電郵：example@mail.com</span>
+                  <span>LinkedIn：linkedin.com/in/example</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="modern-grid">
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">核心摘要</h2>
+                  <span class="section-main-sub">Summary</span>
+                </header>
+                <div class="section-body">
+                  <p>8 年 SaaS 產品與成長策略經驗，專注於多端使用者旅程與轉換優化。擅長跨部門協作、數據驅動決策與 MVP 策略落地。</p>
+                  <div class="skill-tags">
+                    <span class="skill-tag">產品策略</span>
+                    <span class="skill-tag">成長實驗</span>
+                    <span class="skill-tag">數據分析</span>
+                    <span class="skill-tag">跨部門協作</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">工作經驗</h2>
+                  <span class="section-main-sub">Experience</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>資深產品經理｜CloudFlow｜2021 – 目前</strong></p>
+                  <ul class="bullet-list">
+                    <li>建立 B2B SaaS onboarding 流程，轉換率提升 22%。</li>
+                    <li>導入自動化用戶分群，客戶留存率提升 15%。</li>
+                  </ul>
+                  <p><strong>產品經理｜NovaTech｜2017 – 2021</strong></p>
+                  <ul class="bullet-list">
+                    <li>主導行動端改版，NPS 提升 18 分。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">重點專案</h2>
+                  <span class="section-main-sub">Projects</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>企業工作流自動化平台</strong></p>
+                  <ul class="bullet-list">
+                    <li>以使用者訪談 + JTBD 梳理功能優先順序。</li>
+                    <li>推出模板市場，帶動 30% 付費轉化。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="modern-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">教育背景</h2>
+                  <span class="section-main-sub">Education</span>
+                </header>
+                <div class="section-body">
+                  <ul class="bullet-list">
+                    <li><strong>國立台灣大學</strong> — 工業工程學士｜2013 – 2017</li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+          </div>
+        `,
+        creative: `
+          <div class="section-main" data-block>
+            <header class="creative-header">
+              <div class="creative-name">林思瑜</div>
+              <div class="creative-title">品牌設計師｜視覺識別｜包裝設計</div>
+              <div class="creative-tags">
+                <span class="creative-tag">品牌策略</span>
+                <span class="creative-tag">視覺識別</span>
+                <span class="creative-tag">包裝設計</span>
+                <span class="creative-tag">插畫</span>
+              </div>
+            </header>
+
+            <div class="creative-columns">
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">個人概覽</h2>
+                  <span class="section-main-sub">Profile</span>
+                </header>
+                <div class="section-body">
+                  <p>擁有 6 年品牌與包裝設計經驗，擅長將品牌故事轉化為具辨識度的視覺語言，服務涵蓋 FMCG、生活風格與新創品牌。</p>
+                  <p class="note">作品集：behance.net/example</p>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">代表作品</h2>
+                  <span class="section-main-sub">Selected Works</span>
+                </header>
+                <div class="section-body">
+                  <ul class="bullet-list">
+                    <li>為新創咖啡品牌設計全套品牌識別與包裝系統。</li>
+                    <li>打造生活風格品牌季節性主視覺，線上轉換提升 28%。</li>
+                    <li>協助美妝品牌進行產品線重塑，客戶滿意度提升。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">工作經歷</h2>
+                  <span class="section-main-sub">Experience</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>品牌設計師｜Studio A｜2020 – 目前</strong></p>
+                  <ul class="bullet-list">
+                    <li>主導品牌視覺識別專案，協助 20+ 客戶完成品牌升級。</li>
+                    <li>跨團隊協作推動行銷素材一致性，提升品牌辨識度。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="creative-card" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">技能與工具</h2>
+                  <span class="section-main-sub">Skills</span>
+                </header>
+                <div class="section-body">
+                  <div class="skill-tags">
+                    <span class="skill-tag">Adobe CC</span>
+                    <span class="skill-tag">Figma</span>
+                    <span class="skill-tag">品牌策略</span>
+                    <span class="skill-tag">插畫</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
         `
       };
+
+      function setBackendStatus(available, message) {
+        backendAvailable = available;
+        if (available) {
+          backendStatus.textContent = message || '後端已連線';
+          backendStatus.style.background = 'rgba(236, 253, 245, 0.9)';
+          backendStatus.style.borderColor = 'rgba(110, 231, 183, 0.8)';
+          backendStatus.style.color = '#047857';
+        } else {
+          backendStatus.textContent = message || '離線模式（本機保存）';
+          backendStatus.style.background = 'rgba(254, 242, 242, 0.95)';
+          backendStatus.style.borderColor = 'rgba(248, 113, 113, 0.6)';
+          backendStatus.style.color = '#b91c1c';
+        }
+      }
+
+      async function fetchJSON(url, options = {}) {
+        const res = await fetch(url, options);
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      }
+
+      function collectTheme() {
+        return {
+          primary: primaryColorInput.value,
+          accent: accentColorInput.value,
+          bg: bgColorInput.value
+        };
+      }
+
+      function collectFontSettings() {
+        return {
+          size: fontSizeSelect.value,
+          family: fontFamilySelect.value
+        };
+      }
+
+      function renderResumeOptions(resumes) {
+        resumeIndex = new Map();
+        resumeSelect.innerHTML = '';
+        resumes.forEach(resume => {
+          resumeIndex.set(String(resume.id), resume);
+          const option = document.createElement('option');
+          option.value = resume.id;
+          option.textContent = resume.name;
+          resumeSelect.appendChild(option);
+        });
+      }
+
+      function renderVersionOptions(versions) {
+        versionSelect.innerHTML = '';
+        versions.forEach(version => {
+          const option = document.createElement('option');
+          option.value = version.id;
+          option.textContent = version.label;
+          versionSelect.appendChild(option);
+        });
+      }
+
+      function renderStylePresetOptions(presets) {
+        stylePresetSelect.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '套用樣式...';
+        stylePresetSelect.appendChild(defaultOption);
+        presets.forEach(preset => {
+          const option = document.createElement('option');
+          option.value = preset.id;
+          option.textContent = preset.name;
+          stylePresetSelect.appendChild(option);
+        });
+      }
+
+      async function loadResumes() {
+        const data = await fetchJSON(`${API_URL}?action=list_resumes`);
+        const resumes = data.resumes || [];
+        renderResumeOptions(resumes);
+        return resumes;
+      }
+
+      async function createResume(name, useCurrentLayout = false) {
+        const templateId = templateSelect.value;
+        const html = useCurrentLayout ? layoutRoot.innerHTML : templates[templateId];
+        const payload = new URLSearchParams({
+          action: 'create_resume',
+          name,
+          template_id: templateId,
+          html,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings()),
+          avatar_data: currentAvatarData || '',
+          version_label: '初始版本'
+        });
+        const data = await fetchJSON(API_URL, {
+          method: 'POST',
+          body: payload
+        });
+        currentResumeId = data.resume_id;
+        currentVersionId = data.version_id;
+        return data;
+      }
+
+      async function loadVersions(resumeId) {
+        if (!resumeId) return [];
+        const data = await fetchJSON(`${API_URL}?action=list_versions&resume_id=${resumeId}`);
+        const versions = data.versions || [];
+        renderVersionOptions(versions);
+        return versions;
+      }
+
+      function applyLayoutHtml(html, templateId) {
+        layoutRoot.innerHTML = html || templates[templateId] || '';
+        templateSelect.value = templateId || 'teacher';
+        localStorage.setItem(KEY_ACTIVE_TEMPLATE, templateSelect.value);
+        if (editMode) attachDeleteButtons();
+      }
+
+      async function loadVersion(versionId) {
+        if (!versionId) return;
+        const data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        const version = data.version;
+        if (!version) return;
+        currentResumeId = version.resume_id;
+        currentVersionId = version.id;
+        applyLayoutHtml(version.html_content, version.template_id);
+        if (version.theme_json) {
+          try {
+            applyTheme(JSON.parse(version.theme_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (version.font_json) {
+          try {
+            applyFontSettings(JSON.parse(version.font_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (version.avatar_data) {
+          currentAvatarData = version.avatar_data;
+          localStorage.setItem(KEY_AVATAR, version.avatar_data);
+          applyAvatarToDOM(version.avatar_data);
+        } else {
+          currentAvatarData = null;
+          localStorage.removeItem(KEY_AVATAR);
+          applyAvatarToDOM(null);
+        }
+        showStatus('已載入伺服器版本。');
+      }
+
+      async function saveActiveVersion({ createNew = false, label = '' } = {}) {
+        if (!backendAvailable || !currentResumeId) return;
+        const payload = new URLSearchParams({
+          action: 'save_version',
+          resume_id: currentResumeId,
+          version_id: createNew ? '' : (currentVersionId || ''),
+          label: label || (versionSelect.selectedOptions[0]?.textContent ?? '更新版本'),
+          template_id: templateSelect.value,
+          html: layoutRoot.innerHTML,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings()),
+          avatar_data: currentAvatarData || ''
+        });
+        const data = await fetchJSON(API_URL, {
+          method: 'POST',
+          body: payload
+        });
+        currentVersionId = data.version_id || currentVersionId;
+        if (createNew) {
+          await loadVersions(currentResumeId);
+          versionSelect.value = currentVersionId;
+        }
+        showStatus('已同步保存至伺服器。');
+      }
+
+      async function loadStylePresets(resumeId) {
+        if (!resumeId) return [];
+        const data = await fetchJSON(`${API_URL}?action=list_style_presets&resume_id=${resumeId}`);
+        stylePresets = data.presets || [];
+        renderStylePresetOptions(stylePresets);
+        return stylePresets;
+      }
+
+      async function saveStylePreset() {
+        if (!backendAvailable || !currentResumeId) return;
+        const name = prompt('輸入樣式名稱（例如：藍色專業版）');
+        if (!name) return;
+        const payload = new URLSearchParams({
+          action: 'save_style_preset',
+          resume_id: currentResumeId,
+          name,
+          theme_json: JSON.stringify(collectTheme()),
+          font_json: JSON.stringify(collectFontSettings())
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        await loadStylePresets(currentResumeId);
+        showStatus('樣式已保存，可在下拉選單中套用。');
+      }
+
+      function applyStylePreset(presetId) {
+        const preset = stylePresets.find(item => String(item.id) === String(presetId));
+        if (!preset) return;
+        if (preset.theme_json) {
+          try {
+            applyTheme(JSON.parse(preset.theme_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        if (preset.font_json) {
+          try {
+            applyFontSettings(JSON.parse(preset.font_json));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        showStatus('樣式已套用。');
+      }
+
+      async function initBackend() {
+        try {
+          await fetchJSON(`${API_URL}?action=health`);
+          setBackendStatus(true);
+        } catch (e) {
+          setBackendStatus(false);
+          return;
+        }
+
+        try {
+          const resumes = await loadResumes();
+          if (!resumes.length) {
+            await createResume('我的履歷', false);
+          } else {
+            const activeResume = resumes[0];
+            currentResumeId = activeResume.id;
+            resumeSelect.value = String(activeResume.id);
+          }
+          const versions = await loadVersions(currentResumeId);
+          const resumeRecord = resumeIndex.get(String(currentResumeId));
+          const preferredVersion = resumeRecord?.active_version_id || versions[0]?.id;
+          if (preferredVersion) {
+            currentVersionId = preferredVersion;
+            versionSelect.value = String(preferredVersion);
+            await loadVersion(preferredVersion);
+          }
+          await loadStylePresets(currentResumeId);
+        } catch (e) {
+          console.error(e);
+          setBackendStatus(false, '後端連線失敗，已切換本機保存');
+        }
+      }
 
       function getLayoutKey(templateId) {
         return STORAGE_PREFIX + 'layout_' + templateId;
@@ -1290,6 +1866,9 @@
         };
         localStorage.setItem(KEY_THEME, JSON.stringify(theme));
         showStatus('顏色主題已保存。');
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadTheme() {
@@ -1319,6 +1898,9 @@
         };
         localStorage.setItem(KEY_FONT, JSON.stringify(settings));
         showStatus('字體設定已保存。');
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadFontSettings() {
@@ -1381,6 +1963,9 @@
       function saveLayoutFor(templateId) {
         const key = getLayoutKey(templateId);
         localStorage.setItem(key, layoutRoot.innerHTML);
+        if (backendAvailable) {
+          saveActiveVersion();
+        }
       }
 
       function loadLayoutFor(templateId, resetToDefault = false) {
@@ -1388,6 +1973,7 @@
         const saved = resetToDefault ? null : localStorage.getItem(key);
         const html = saved || templates[templateId];
         layoutRoot.innerHTML = html;
+        templateSelect.value = templateId;
         if (editMode) attachDeleteButtons();
         applyAvatarFromStorage();
       }
@@ -1476,9 +2062,8 @@
 
       function applyAvatarFromStorage() {
         const dataUrl = localStorage.getItem(KEY_AVATAR);
-        if (dataUrl) {
-          applyAvatarToDOM(dataUrl);
-        }
+        currentAvatarData = dataUrl || null;
+        applyAvatarToDOM(dataUrl);
       }
 
       function handleAvatarFile(file) {
@@ -1486,9 +2071,13 @@
         const reader = new FileReader();
         reader.onload = e => {
           const dataUrl = e.target.result;
+          currentAvatarData = dataUrl;
           localStorage.setItem(KEY_AVATAR, dataUrl);
           applyAvatarToDOM(dataUrl);
           showStatus('頭像已更新並保存。');
+          if (backendAvailable) {
+            saveActiveVersion();
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -1564,6 +2153,82 @@
       templateSelect.addEventListener('change', () => {
         const id = templateSelect.value;
         setActiveTemplate(id, false);
+        if (backendAvailable) {
+          saveActiveVersion({ label: versionSelect.selectedOptions[0]?.textContent || '更新版本' });
+        }
+      });
+
+      resumeSelect.addEventListener('change', async () => {
+        if (!backendAvailable) return;
+        currentResumeId = resumeSelect.value;
+        const versions = await loadVersions(currentResumeId);
+        const resumeRecord = resumeIndex.get(String(currentResumeId));
+        const preferredVersion = resumeRecord?.active_version_id || versions[0]?.id;
+        if (preferredVersion) {
+          currentVersionId = preferredVersion;
+          versionSelect.value = String(preferredVersion);
+          await loadVersion(preferredVersion);
+          await loadStylePresets(currentResumeId);
+        }
+      });
+
+      versionSelect.addEventListener('change', async () => {
+        if (!backendAvailable) return;
+        currentVersionId = versionSelect.value;
+        await loadVersion(currentVersionId);
+      });
+
+      newResumeBtn.addEventListener('click', async () => {
+        if (!backendAvailable) return;
+        const name = prompt('輸入新履歷名稱');
+        if (!name) return;
+        const data = await createResume(name, true);
+        const resumes = await loadResumes();
+        resumeSelect.value = String(data.resume_id);
+        currentResumeId = data.resume_id;
+        const versions = await loadVersions(currentResumeId);
+        versionSelect.value = String(data.version_id);
+        currentVersionId = data.version_id;
+        await loadVersion(currentVersionId);
+        await loadStylePresets(currentResumeId);
+      });
+
+      newVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        const label = prompt('輸入新版本名稱');
+        if (!label) return;
+        await saveActiveVersion({ createNew: true, label });
+      });
+
+      saveVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        await saveActiveVersion();
+      });
+
+      deleteVersionBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentVersionId) return;
+        if (!confirm('確定刪除這個版本？刪除後將無法復原。')) return;
+        const payload = new URLSearchParams({
+          action: 'delete_version',
+          version_id: currentVersionId
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        const versions = await loadVersions(currentResumeId);
+        const nextVersion = versions[0]?.id;
+        if (nextVersion) {
+          currentVersionId = nextVersion;
+          versionSelect.value = String(nextVersion);
+          await loadVersion(nextVersion);
+        }
+      });
+
+      saveStylePresetBtn.addEventListener('click', () => {
+        saveStylePreset();
+      });
+
+      stylePresetSelect.addEventListener('change', () => {
+        if (!backendAvailable) return;
+        applyStylePreset(stylePresetSelect.value);
       });
 
       [primaryColorInput, accentColorInput, bgColorInput].forEach(input => {
@@ -1658,6 +2323,8 @@
       setActiveTemplate(initialTemplate, false);
       setEditMode(true);
       setPrintMode(false);
+      setBackendStatus(false, '後端連線中...');
+      initBackend();
     });
   </script>
 </body>
