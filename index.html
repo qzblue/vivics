@@ -225,6 +225,34 @@
       box-shadow: 0 4px 10px rgba(248, 113, 113, 0.4);
     }
 
+    .style-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .style-preset-btn {
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #111827;
+    }
+
+    .style-preset-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: var(--swatch, #e2e8f0);
+    }
+
     .status-badge {
       font-size: 10px;
       padding: 2px 8px;
@@ -1138,6 +1166,7 @@
       <label for="resumeSelect">履歷：</label>
       <select id="resumeSelect"></select>
       <button id="newResumeBtn" class="secondary">新增履歷</button>
+      <button id="deleteResumeBtn" class="danger">刪除履歷</button>
 
       <label for="versionSelect">版本：</label>
       <select id="versionSelect"></select>
@@ -1218,6 +1247,12 @@
         <span id="autosaveHint">自動保存已啟用</span>
       </div>
     </div>
+    <div class="helper-row">
+      <div class="helper-item">
+        <strong>風格主題</strong>
+        <div class="style-presets" id="stylePresetButtons"></div>
+      </div>
+    </div>
   </div>
 
   <button id="toolbarHandle" class="toolbar-handle no-print" type="button">展開工具列</button>
@@ -1253,12 +1288,14 @@
       const statusText = document.getElementById('statusText');
       const avatarBtn = document.getElementById('avatarBtn');
       const insertImgBtn = document.getElementById('insertImgBtn');
+      const deleteResumeBtn = document.getElementById('deleteResumeBtn');
       const collapseToolbarBtn = document.getElementById('collapseToolbarBtn');
       const toolbarHandle = document.getElementById('toolbarHandle');
       const sectionJumpSelect = document.getElementById('sectionJumpSelect');
       const contentStats = document.getElementById('contentStats');
       const lastSavedText = document.getElementById('lastSavedText');
       const autosaveHint = document.getElementById('autosaveHint');
+      const stylePresetButtons = document.getElementById('stylePresetButtons');
       const avatarInput = document.getElementById('avatarInput');
       const insertImgInput = document.getElementById('insertImgInput');
 
@@ -1281,6 +1318,17 @@
       let sectionTargets = [];
       let lastSavedAt = null;
       let toolbarCollapsed = false;
+
+      const styleThemes = [
+        { id: 'classic', name: '經典藍', primary: '#3f6df6', accent: '#ffb347', bg: '#f3f4f8' },
+        { id: 'emerald', name: '森系綠', primary: '#059669', accent: '#10b981', bg: '#ecfdf5' },
+        { id: 'sunset', name: '日落橘', primary: '#f97316', accent: '#fb7185', bg: '#fff7ed' },
+        { id: 'lavender', name: '薰衣草', primary: '#8b5cf6', accent: '#ec4899', bg: '#f5f3ff' },
+        { id: 'slate', name: '霧灰黑', primary: '#0f172a', accent: '#38bdf8', bg: '#f8fafc' },
+        { id: 'sand', name: '沙漠金', primary: '#b45309', accent: '#f59e0b', bg: '#fffbeb' },
+        { id: 'rose', name: '玫瑰粉', primary: '#db2777', accent: '#f97316', bg: '#fdf2f8' },
+        { id: 'ocean', name: '海洋藍', primary: '#0ea5e9', accent: '#22c55e', bg: '#ecfeff' }
+      ];
 
       const templates = {
         teacher: `
@@ -2316,6 +2364,26 @@
         }, 2500);
       }
 
+      function renderStyleThemeButtons() {
+        if (!stylePresetButtons) return;
+        stylePresetButtons.innerHTML = '';
+        styleThemes.forEach(theme => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'style-preset-btn';
+          btn.dataset.themeId = theme.id;
+          btn.innerHTML = `
+            <span class="style-preset-swatch" style="--swatch: ${theme.primary}"></span>
+            ${theme.name}
+          `;
+          btn.addEventListener('click', () => {
+            applyTheme(theme);
+            saveTheme();
+          });
+          stylePresetButtons.appendChild(btn);
+        });
+      }
+
       function getBackendFailureMessage(error, afterHandshake = false) {
         if (location.protocol === 'file:') {
           return '目前為檔案模式，請用 PHP 伺服器開啟以啟用後端';
@@ -2739,6 +2807,36 @@
         await loadStylePresets(currentResumeId);
       });
 
+      deleteResumeBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        const resumeName = resumeSelect.selectedOptions[0]?.textContent || '';
+        if (!confirm(`確定刪除履歷「${resumeName}」？刪除後將無法復原。`)) return;
+        const payload = new URLSearchParams({
+          action: 'delete_resume',
+          resume_id: currentResumeId
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        const resumes = await loadResumes();
+        const nextResume = resumes[0];
+        if (nextResume) {
+          currentResumeId = nextResume.id;
+          resumeSelect.value = String(nextResume.id);
+          const versions = await loadVersions(currentResumeId);
+          const preferredVersion = nextResume.active_version_id || versions[0]?.id;
+          if (preferredVersion) {
+            currentVersionId = preferredVersion;
+            versionSelect.value = String(preferredVersion);
+            await loadVersion(preferredVersion);
+          }
+          await loadStylePresets(currentResumeId);
+        } else {
+          currentResumeId = null;
+          currentVersionId = null;
+          layoutRoot.innerHTML = templates[getActiveTemplate()] || '';
+          showStatus('履歷已刪除，尚無其他履歷。');
+        }
+      });
+
       newVersionBtn.addEventListener('click', async () => {
         if (!backendAvailable || !currentResumeId) return;
         const label = prompt('輸入新版本名稱');
@@ -2904,6 +3002,7 @@
       /* 初始化 */
       loadTheme();
       loadFontSettings();
+      renderStyleThemeButtons();
       const initialTemplate = getActiveTemplate();
       templateSelect.value = initialTemplate;
       setActiveTemplate(initialTemplate, false);
