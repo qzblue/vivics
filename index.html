@@ -2235,11 +2235,16 @@
       }
 
       async function initBackend() {
+        if (location.protocol === 'file:') {
+          setBackendStatus(false, '目前為檔案模式，請用 PHP 伺服器開啟以啟用後端');
+          return;
+        }
         try {
           await fetchJSON(`${API_URL}?action=health`);
           setBackendStatus(true);
         } catch (e) {
-          setBackendStatus(false);
+          const message = getBackendFailureMessage(e);
+          setBackendStatus(false, message);
           return;
         }
 
@@ -2263,7 +2268,8 @@
           await loadStylePresets(currentResumeId);
         } catch (e) {
           console.error(e);
-          setBackendStatus(false, '後端連線失敗，已切換本機保存');
+          const message = getBackendFailureMessage(e, true);
+          setBackendStatus(false, message);
         }
       }
 
@@ -2278,6 +2284,23 @@
         statusText._timer = setTimeout(() => {
           statusText.style.opacity = '0.8';
         }, 2500);
+      }
+
+      function getBackendFailureMessage(error, afterHandshake = false) {
+        if (location.protocol === 'file:') {
+          return '目前為檔案模式，請用 PHP 伺服器開啟以啟用後端';
+        }
+        if (String(error?.message || '').includes('Network response was not ok')) {
+          return afterHandshake
+            ? '後端回應錯誤，請確認 api.php 與資料表'
+            : '無法連線 api.php，請確認 PHP 伺服器已啟動';
+        }
+        if (String(error?.message || '').includes('Failed to fetch')) {
+          return '無法連線 api.php，請確認 PHP 伺服器與網路狀態';
+        }
+        return afterHandshake
+          ? '後端連線失敗，已切換本機保存'
+          : '後端連線失敗，已切換本機保存';
       }
 
       function updateLastSaved(label = '已保存') {
