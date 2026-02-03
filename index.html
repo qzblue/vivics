@@ -102,6 +102,81 @@
       color: var(--text-sub);
     }
 
+    .helper-panel {
+      max-width: 210mm;
+      margin: 0 auto 16px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      display: grid;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .helper-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .helper-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .helper-item strong {
+      font-size: 11px;
+      color: #111827;
+    }
+
+    .helper-panel select {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+
+    .helper-hint {
+      font-size: 10px;
+      color: #6b7280;
+    }
+
+    .toolbar-handle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 50;
+      display: none;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--primary), #6366f1);
+      color: #f9fafb;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
+    }
+
+    body.toolbar-collapsed .toolbar,
+    body.toolbar-collapsed .helper-panel {
+      display: none;
+    }
+
+    body.toolbar-collapsed .toolbar-handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .toolbar-row {
       display: flex;
       flex-wrap: wrap;
@@ -150,6 +225,34 @@
       box-shadow: 0 4px 10px rgba(248, 113, 113, 0.4);
     }
 
+    .style-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .style-preset-btn {
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #111827;
+    }
+
+    .style-preset-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: var(--swatch, #e2e8f0);
+    }
+
     .status-badge {
       font-size: 10px;
       padding: 2px 8px;
@@ -193,6 +296,10 @@
     @media (max-width: 768px) {
       .toolbar {
         grid-template-columns: minmax(0, 1fr);
+      }
+      .helper-row {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
 
@@ -905,6 +1012,106 @@
       box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
     }
 
+    /* 高階主管模板 */
+    .executive-header {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.08), rgba(255, 255, 255, 0.95));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .executive-title {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .executive-highlight {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .executive-pill {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .executive-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px) {
+      .executive-grid {
+        grid-template-columns: 1.1fr 1fr;
+      }
+    }
+
+    /* 科技感模板 */
+    .tech-header {
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, rgba(14, 116, 144, 0.18), rgba(99, 102, 241, 0.12));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .tech-tag {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #0e7490;
+    }
+
+    .tech-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px) {
+      .tech-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* 寧靜雅緻模板 */
+    .calm-header {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(255, 255, 255, 0.96));
+      border: 1px solid rgba(186, 230, 253, 0.8);
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .calm-name {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .calm-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+    }
+
     /* 插入圖片預設樣式 */
     .inserted-image {
       max-width: 100%;
@@ -941,6 +1148,9 @@
         <option value="simple">極簡風格（單欄）</option>
         <option value="modern">現代專業（雙欄卡片）</option>
         <option value="creative">創意強調（色塊卡片）</option>
+        <option value="executive">高階主管（摘要 + 亮點）</option>
+        <option value="tech">科技感（專案導向）</option>
+        <option value="calm">寧靜雅緻（溫和配色）</option>
       </select>
 
       <button id="toggleEdit">編輯模式</button>
@@ -949,12 +1159,14 @@
       <button id="printModeBtn" class="secondary">切換打印預覽模式</button>
       <button id="avatarBtn" class="secondary">設定頭像</button>
       <button id="insertImgBtn" class="secondary">插入圖片</button>
+      <button id="collapseToolbarBtn" class="secondary">收合工具列</button>
     </div>
 
     <div class="toolbar-row">
       <label for="resumeSelect">履歷：</label>
       <select id="resumeSelect"></select>
       <button id="newResumeBtn" class="secondary">新增履歷</button>
+      <button id="deleteResumeBtn" class="danger">刪除履歷</button>
 
       <label for="versionSelect">版本：</label>
       <select id="versionSelect"></select>
@@ -1005,6 +1217,46 @@
     </div>
   </div>
 
+  <div class="helper-panel no-print" id="helperPanel">
+    <div class="helper-row">
+      <div class="helper-item">
+        <strong>快速跳轉</strong>
+        <select id="sectionJumpSelect">
+          <option value="">選擇段落...</option>
+        </select>
+        <span class="helper-hint">依據區塊標題定位內容</span>
+      </div>
+      <div class="helper-item">
+        <strong>內容統計</strong>
+        <span id="contentStats">字數 0｜單詞 0</span>
+      </div>
+      <div class="helper-item">
+        <strong>最後保存</strong>
+        <span id="lastSavedText">尚未保存</span>
+      </div>
+    </div>
+    <div class="helper-row">
+      <div class="helper-item">
+        <strong>快捷鍵</strong>
+        <span>Ctrl/⌘ + S 保存</span>
+        <span>Ctrl/⌘ + E 編輯模式</span>
+        <span>Ctrl/⌘ + Shift + P 打印預覽</span>
+      </div>
+      <div class="helper-item">
+        <strong>狀態</strong>
+        <span id="autosaveHint">自動保存已啟用</span>
+      </div>
+    </div>
+    <div class="helper-row">
+      <div class="helper-item">
+        <strong>風格主題</strong>
+        <div class="style-presets" id="stylePresetButtons"></div>
+      </div>
+    </div>
+  </div>
+
+  <button id="toolbarHandle" class="toolbar-handle no-print" type="button">展開工具列</button>
+
   <!-- 隱藏檔案 input -->
   <input type="file" id="avatarInput" accept="image/*" class="no-print" style="display:none" />
   <input type="file" id="insertImgInput" accept="image/*" class="no-print" style="display:none" />
@@ -1022,6 +1274,7 @@
       const KEY_THEME = STORAGE_PREFIX + 'theme';
       const KEY_FONT = STORAGE_PREFIX + 'font';
       const KEY_AVATAR = STORAGE_PREFIX + 'avatar';
+      const KEY_TOOLBAR = STORAGE_PREFIX + 'toolbar_collapsed';
       const API_URL = 'api.php';
 
       const layoutRoot = document.getElementById('layoutRoot');
@@ -1035,6 +1288,14 @@
       const statusText = document.getElementById('statusText');
       const avatarBtn = document.getElementById('avatarBtn');
       const insertImgBtn = document.getElementById('insertImgBtn');
+      const deleteResumeBtn = document.getElementById('deleteResumeBtn');
+      const collapseToolbarBtn = document.getElementById('collapseToolbarBtn');
+      const toolbarHandle = document.getElementById('toolbarHandle');
+      const sectionJumpSelect = document.getElementById('sectionJumpSelect');
+      const contentStats = document.getElementById('contentStats');
+      const lastSavedText = document.getElementById('lastSavedText');
+      const autosaveHint = document.getElementById('autosaveHint');
+      const stylePresetButtons = document.getElementById('stylePresetButtons');
       const avatarInput = document.getElementById('avatarInput');
       const insertImgInput = document.getElementById('insertImgInput');
 
@@ -1047,12 +1308,27 @@
       let editMode = false;
       let printMode = false;
       let autosaveTimer = null;
+      let helperRefreshTimer = null;
       let backendAvailable = false;
       let currentResumeId = null;
       let currentVersionId = null;
       let currentAvatarData = null;
       let resumeIndex = new Map();
       let stylePresets = [];
+      let sectionTargets = [];
+      let lastSavedAt = null;
+      let toolbarCollapsed = false;
+
+      const styleThemes = [
+        { id: 'classic', name: '經典藍', primary: '#3f6df6', accent: '#ffb347', bg: '#f3f4f8' },
+        { id: 'emerald', name: '森系綠', primary: '#059669', accent: '#10b981', bg: '#ecfdf5' },
+        { id: 'sunset', name: '日落橘', primary: '#f97316', accent: '#fb7185', bg: '#fff7ed' },
+        { id: 'lavender', name: '薰衣草', primary: '#8b5cf6', accent: '#ec4899', bg: '#f5f3ff' },
+        { id: 'slate', name: '霧灰黑', primary: '#0f172a', accent: '#38bdf8', bg: '#f8fafc' },
+        { id: 'sand', name: '沙漠金', primary: '#b45309', accent: '#f59e0b', bg: '#fffbeb' },
+        { id: 'rose', name: '玫瑰粉', primary: '#db2777', accent: '#f97316', bg: '#fdf2f8' },
+        { id: 'ocean', name: '海洋藍', primary: '#0ea5e9', accent: '#22c55e', bg: '#ecfeff' }
+      ];
 
       const templates = {
         teacher: `
@@ -1571,6 +1847,215 @@
               </section>
             </div>
           </div>
+        `,
+        executive: `
+          <div class="section-main" data-block>
+            <header class="executive-header">
+              <div class="avatar js-avatar">
+                <img class="js-avatar-img" alt="頭像" />
+                <span class="js-avatar-initials">KC</span>
+              </div>
+              <div>
+                <div class="name">柯佳寧</div>
+                <div class="executive-title">營運長｜跨區域成長｜組織與流程優化</div>
+                <div class="executive-highlight">
+                  <span class="executive-pill">12 年管理經驗</span>
+                  <span class="executive-pill">跨國團隊 120+ 人</span>
+                  <span class="executive-pill">成本降低 18%</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="executive-grid">
+              <section class="section-main" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">核心摘要</h2>
+                  <span class="section-main-sub">Executive Summary</span>
+                </header>
+                <div class="section-body">
+                  <p>專注企業營運效率與成長策略，擅長以數據驅動跨部門協作，建立可擴展的流程與組織架構。</p>
+                  <ul class="bullet-list">
+                    <li>推動區域擴張計畫，兩年內營收成長 2.4 倍。</li>
+                    <li>建立 KPI 儀表板與週期檢核機制，提升營運透明度。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="section-main" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">關鍵指標</h2>
+                  <span class="section-main-sub">Highlights</span>
+                </header>
+                <div class="section-body">
+                  <div class="skill-tags">
+                    <span class="skill-tag">淨利率 +12%</span>
+                    <span class="skill-tag">交付週期 -35%</span>
+                    <span class="skill-tag">客訴率 -28%</span>
+                    <span class="skill-tag">人才留任率 91%</span>
+                  </div>
+                  <p class="note">聚焦營運、供應鏈與人才三大面向改善。</p>
+                </div>
+              </section>
+            </div>
+
+            <section class="section-main" data-block>
+              <header class="section-main-header">
+                <h2 class="section-main-title">領導經歷</h2>
+                <span class="section-main-sub">Leadership</span>
+              </header>
+              <div class="timeline">
+                <article class="timeline-item">
+                  <span class="timeline-bullet"></span>
+                  <div class="timeline-header">
+                    <div class="timeline-role">營運長</div>
+                    <div class="timeline-org">NovaWorks 集團</div>
+                    <div class="timeline-meta">2020 – 現在</div>
+                  </div>
+                  <div class="timeline-highlights">
+                    <ul>
+                      <li>整合 6 個事業部門的營運節點，建立共享服務中心。</li>
+                      <li>導入跨區域人力配置系統，提升產能利用率。</li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="timeline-item">
+                  <span class="timeline-bullet"></span>
+                  <div class="timeline-header">
+                    <div class="timeline-role">營運副總</div>
+                    <div class="timeline-org">PrimeWave</div>
+                    <div class="timeline-meta">2015 – 2020</div>
+                  </div>
+                  <div class="timeline-highlights">
+                    <ul>
+                      <li>規劃亞太市場擴張，新增 4 個營運據點。</li>
+                      <li>建立績效獎酬制度，提升團隊目標一致性。</li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+        `,
+        tech: `
+          <div class="section-main" data-block>
+            <header class="tech-header">
+              <div class="simple-name">梁子翔</div>
+              <div class="simple-title">軟體工程師｜全端開發｜雲端架構</div>
+              <div class="creative-tags">
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">TypeScript</span>
+                <span class="tech-tag">AWS</span>
+                <span class="tech-tag">Kubernetes</span>
+              </div>
+            </header>
+
+            <div class="tech-grid">
+              <section class="section-main" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">技術亮點</h2>
+                  <span class="section-main-sub">Tech Focus</span>
+                </header>
+                <div class="section-body">
+                  <ul class="bullet-list">
+                    <li>微服務架構拆分，部署時間縮短 40%。</li>
+                    <li>導入 Observability 平台，故障排除時間減少一半。</li>
+                    <li>設計 API Gateway 與權限策略，支援多租戶模式。</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="section-main" data-block>
+                <header class="section-main-header">
+                  <h2 class="section-main-title">專案精選</h2>
+                  <span class="section-main-sub">Projects</span>
+                </header>
+                <div class="section-body">
+                  <p><strong>智能排程平台</strong></p>
+                  <ul class="bullet-list">
+                    <li>建置演算法排程核心，平均排程效率提升 30%。</li>
+                    <li>前端採用模組化設計，維護成本降低。</li>
+                  </ul>
+                  <p><strong>即時客服中心</strong></p>
+                  <ul class="bullet-list">
+                    <li>結合 WebSocket 與事件驅動架構，支援 8K 併發。</li>
+                    <li>導入 A/B 測試流程，轉換率提升 12%。</li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+
+            <section class="section-main" data-block>
+              <header class="section-main-header">
+                <h2 class="section-main-title">經歷與技能</h2>
+                <span class="section-main-sub">Experience & Skills</span>
+              </header>
+              <div class="section-body">
+                <p><strong>資深軟體工程師｜CloudNet｜2021 – 現在</strong></p>
+                <ul class="bullet-list">
+                  <li>主導雲端架構優化，月費成本下降 15%。</li>
+                  <li>打造 CI/CD 流程，交付週期縮短至每週。</li>
+                </ul>
+                <div class="skill-tags">
+                  <span class="skill-tag">React</span>
+                  <span class="skill-tag">Go</span>
+                  <span class="skill-tag">Terraform</span>
+                  <span class="skill-tag">PostgreSQL</span>
+                </div>
+              </div>
+            </section>
+          </div>
+        `,
+        calm: `
+          <div class="section-main" data-block>
+            <header class="calm-header">
+              <div class="calm-name">張若晴</div>
+              <div class="title">人資顧問｜員工體驗｜組織文化</div>
+              <div class="calm-meta">
+                <span>台中</span>
+                <span>電話：+886 9xx xxx xxx</span>
+                <span>電郵：example@mail.com</span>
+              </div>
+            </header>
+
+            <section class="section-main" data-block>
+              <header class="section-main-header">
+                <h2 class="section-main-title">個人簡介</h2>
+                <span class="section-main-sub">Profile</span>
+              </header>
+              <div class="section-body">
+                <p>專注員工體驗與組織文化專案，擅長以同理與數據雙軸推動人資策略落地。</p>
+              </div>
+            </section>
+
+            <section class="section-main" data-block>
+              <header class="section-main-header">
+                <h2 class="section-main-title">專案成果</h2>
+                <span class="section-main-sub">Outcomes</span>
+              </header>
+              <div class="section-body">
+                <ul class="bullet-list">
+                  <li>建立 onboarding 地圖與體驗量表，新人留任率提升 20%。</li>
+                  <li>推動內部導師制度，員工滿意度提升 15%。</li>
+                  <li>設計混合式培訓課程，年度完成率達 92%。</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="section-main" data-block>
+              <header class="section-main-header">
+                <h2 class="section-main-title">專長與工具</h2>
+                <span class="section-main-sub">Skills</span>
+              </header>
+              <div class="section-body">
+                <div class="skill-tags">
+                  <span class="skill-tag">人才盤點</span>
+                  <span class="skill-tag">員工體驗設計</span>
+                  <span class="skill-tag">組織文化工作坊</span>
+                  <span class="skill-tag">績效制度設計</span>
+                </div>
+              </div>
+            </section>
+          </div>
         `
       };
 
@@ -1591,10 +2076,22 @@
 
       async function fetchJSON(url, options = {}) {
         const res = await fetch(url, options);
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
+        const text = await res.text();
+        let data = null;
+        if (text) {
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            data = null;
+          }
         }
-        return res.json();
+        if (!res.ok) {
+          const error = new Error('Network response was not ok');
+          error.status = res.status;
+          error.payload = data;
+          throw error;
+        }
+        return data ?? {};
       }
 
       function collectTheme() {
@@ -1690,13 +2187,23 @@
         templateSelect.value = templateId || 'teacher';
         localStorage.setItem(KEY_ACTIVE_TEMPLATE, templateSelect.value);
         if (editMode) attachDeleteButtons();
+        scheduleHelperRefresh();
       }
 
       async function loadVersion(versionId) {
         if (!versionId) return;
-        const data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        let data = null;
+        try {
+          data = await fetchJSON(`${API_URL}?action=load_version&version_id=${versionId}`);
+        } catch (error) {
+          if (error?.status === 404) {
+            showStatus('指定版本不存在，將嘗試載入最新版本。');
+            return false;
+          }
+          throw error;
+        }
         const version = data.version;
-        if (!version) return;
+        if (!version) return false;
         currentResumeId = version.resume_id;
         currentVersionId = version.id;
         applyLayoutHtml(version.html_content, version.template_id);
@@ -1724,6 +2231,7 @@
           applyAvatarToDOM(null);
         }
         showStatus('已載入伺服器版本。');
+        return true;
       }
 
       async function saveActiveVersion({ createNew = false, label = '' } = {}) {
@@ -1744,6 +2252,7 @@
           body: payload
         });
         currentVersionId = data.version_id || currentVersionId;
+        updateLastSaved('已同步');
         if (createNew) {
           await loadVersions(currentResumeId);
           versionSelect.value = currentVersionId;
@@ -1796,11 +2305,16 @@
       }
 
       async function initBackend() {
+        if (location.protocol === 'file:') {
+          setBackendStatus(false, '目前為檔案模式，請用 PHP 伺服器開啟以啟用後端');
+          return;
+        }
         try {
           await fetchJSON(`${API_URL}?action=health`);
           setBackendStatus(true);
         } catch (e) {
-          setBackendStatus(false);
+          const message = getBackendFailureMessage(e);
+          setBackendStatus(false, message);
           return;
         }
 
@@ -1819,12 +2333,21 @@
           if (preferredVersion) {
             currentVersionId = preferredVersion;
             versionSelect.value = String(preferredVersion);
-            await loadVersion(preferredVersion);
+            const loaded = await loadVersion(preferredVersion);
+            if (!loaded && versions.length) {
+              const fallbackVersion = versions[0]?.id;
+              if (fallbackVersion) {
+                currentVersionId = fallbackVersion;
+                versionSelect.value = String(fallbackVersion);
+                await loadVersion(fallbackVersion);
+              }
+            }
           }
           await loadStylePresets(currentResumeId);
         } catch (e) {
           console.error(e);
-          setBackendStatus(false, '後端連線失敗，已切換本機保存');
+          const message = getBackendFailureMessage(e, true);
+          setBackendStatus(false, message);
         }
       }
 
@@ -1839,6 +2362,89 @@
         statusText._timer = setTimeout(() => {
           statusText.style.opacity = '0.8';
         }, 2500);
+      }
+
+      function renderStyleThemeButtons() {
+        if (!stylePresetButtons) return;
+        stylePresetButtons.innerHTML = '';
+        styleThemes.forEach(theme => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'style-preset-btn';
+          btn.dataset.themeId = theme.id;
+          btn.innerHTML = `
+            <span class="style-preset-swatch" style="--swatch: ${theme.primary}"></span>
+            ${theme.name}
+          `;
+          btn.addEventListener('click', () => {
+            applyTheme(theme);
+            saveTheme();
+          });
+          stylePresetButtons.appendChild(btn);
+        });
+      }
+
+      function getBackendFailureMessage(error, afterHandshake = false) {
+        if (location.protocol === 'file:') {
+          return '目前為檔案模式，請用 PHP 伺服器開啟以啟用後端';
+        }
+        if (String(error?.message || '').includes('Network response was not ok')) {
+          return afterHandshake
+            ? '後端回應錯誤，請確認 api.php 與資料表'
+            : '無法連線 api.php，請確認 PHP 伺服器已啟動';
+        }
+        if (String(error?.message || '').includes('Failed to fetch')) {
+          return '無法連線 api.php，請確認 PHP 伺服器與網路狀態';
+        }
+        return afterHandshake
+          ? '後端連線失敗，已切換本機保存'
+          : '後端連線失敗，已切換本機保存';
+      }
+
+      function updateLastSaved(label = '已保存') {
+        lastSavedAt = new Date();
+        const timeText = lastSavedAt.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+        lastSavedText.textContent = `${timeText} ${label}`;
+      }
+
+      function updateContentStats() {
+        const text = (layoutRoot.innerText || '').trim();
+        const charCount = text.replace(/\s+/g, '').length;
+        const wordCount = text ? text.split(/\s+/).filter(Boolean).length : 0;
+        contentStats.textContent = `字數 ${charCount}｜單詞 ${wordCount}`;
+      }
+
+      function refreshSectionJump() {
+        sectionTargets = [];
+        sectionJumpSelect.innerHTML = '<option value="">選擇段落...</option>';
+        const blocks = layoutRoot.querySelectorAll('[data-block]');
+        blocks.forEach((block, index) => {
+          const heading = block.querySelector('h1, h2, h3, .section-main-title, .section-title');
+          const label = (heading?.textContent || '').trim() || `區塊 ${index + 1}`;
+          const option = document.createElement('option');
+          option.value = String(index);
+          option.textContent = label;
+          sectionJumpSelect.appendChild(option);
+          sectionTargets.push(block);
+        });
+      }
+
+      function scheduleHelperRefresh() {
+        clearTimeout(helperRefreshTimer);
+        helperRefreshTimer = setTimeout(() => {
+          refreshSectionJump();
+          updateContentStats();
+        }, 300);
+      }
+
+      function setToolbarCollapsed(collapsed) {
+        toolbarCollapsed = collapsed;
+        document.body.classList.toggle('toolbar-collapsed', toolbarCollapsed);
+        if (collapseToolbarBtn) {
+          collapseToolbarBtn.textContent = toolbarCollapsed ? '展開工具列' : '收合工具列';
+        }
+        toolbarHandle.textContent = toolbarCollapsed ? '展開工具列' : '收合工具列';
+        localStorage.setItem(KEY_TOOLBAR, toolbarCollapsed ? '1' : '0');
       }
 
       function applyTheme(theme) {
@@ -1866,6 +2472,7 @@
         };
         localStorage.setItem(KEY_THEME, JSON.stringify(theme));
         showStatus('顏色主題已保存。');
+        updateLastSaved('主題已保存');
         if (backendAvailable) {
           saveActiveVersion();
         }
@@ -1898,6 +2505,7 @@
         };
         localStorage.setItem(KEY_FONT, JSON.stringify(settings));
         showStatus('字體設定已保存。');
+        updateLastSaved('字體已保存');
         if (backendAvailable) {
           saveActiveVersion();
         }
@@ -1963,6 +2571,7 @@
       function saveLayoutFor(templateId) {
         const key = getLayoutKey(templateId);
         localStorage.setItem(key, layoutRoot.innerHTML);
+        updateLastSaved('已保存');
         if (backendAvailable) {
           saveActiveVersion();
         }
@@ -1981,6 +2590,7 @@
       function setActiveTemplate(templateId, resetToDefault = false) {
         loadLayoutFor(templateId, resetToDefault);
         localStorage.setItem(KEY_ACTIVE_TEMPLATE, templateId);
+        scheduleHelperRefresh();
         showStatus(resetToDefault ? '已重置為當前模板的預設內容。' : '已切換模板。');
       }
 
@@ -2034,6 +2644,7 @@
           container.appendChild(section);
         }
         if (editMode) attachDeleteButtons();
+        scheduleHelperRefresh();
         showStatus('已新增一個內容模塊。');
       }
 
@@ -2075,6 +2686,7 @@
           localStorage.setItem(KEY_AVATAR, dataUrl);
           applyAvatarToDOM(dataUrl);
           showStatus('頭像已更新並保存。');
+          updateLastSaved('頭像已保存');
           if (backendAvailable) {
             saveActiveVersion();
           }
@@ -2102,6 +2714,7 @@
         }
         const activeId = getActiveTemplate();
         saveLayoutFor(activeId);
+        updateLastSaved('圖片已保存');
         showStatus('圖片已插入並保存。');
       }
 
@@ -2122,6 +2735,7 @@
       saveBtn.addEventListener('click', () => {
         const activeId = getActiveTemplate();
         saveLayoutFor(activeId);
+        updateLastSaved('已手動保存');
         showStatus('已手動保存到本機（localStorage）。');
       });
 
@@ -2193,6 +2807,36 @@
         await loadStylePresets(currentResumeId);
       });
 
+      deleteResumeBtn.addEventListener('click', async () => {
+        if (!backendAvailable || !currentResumeId) return;
+        const resumeName = resumeSelect.selectedOptions[0]?.textContent || '';
+        if (!confirm(`確定刪除履歷「${resumeName}」？刪除後將無法復原。`)) return;
+        const payload = new URLSearchParams({
+          action: 'delete_resume',
+          resume_id: currentResumeId
+        });
+        await fetchJSON(API_URL, { method: 'POST', body: payload });
+        const resumes = await loadResumes();
+        const nextResume = resumes[0];
+        if (nextResume) {
+          currentResumeId = nextResume.id;
+          resumeSelect.value = String(nextResume.id);
+          const versions = await loadVersions(currentResumeId);
+          const preferredVersion = nextResume.active_version_id || versions[0]?.id;
+          if (preferredVersion) {
+            currentVersionId = preferredVersion;
+            versionSelect.value = String(preferredVersion);
+            await loadVersion(preferredVersion);
+          }
+          await loadStylePresets(currentResumeId);
+        } else {
+          currentResumeId = null;
+          currentVersionId = null;
+          layoutRoot.innerHTML = templates[getActiveTemplate()] || '';
+          showStatus('履歷已刪除，尚無其他履歷。');
+        }
+      });
+
       newVersionBtn.addEventListener('click', async () => {
         if (!backendAvailable || !currentResumeId) return;
         const label = prompt('輸入新版本名稱');
@@ -2259,11 +2903,14 @@
         if (!editMode) return;
         statusText.textContent = '正在自動保存...';
         statusText.style.opacity = '1';
+        autosaveHint.textContent = '正在自動保存...';
         clearTimeout(autosaveTimer);
         autosaveTimer = setTimeout(() => {
           const activeId = getActiveTemplate();
           saveLayoutFor(activeId);
+          autosaveHint.textContent = '自動保存已啟用';
           showStatus('已自動保存。');
+          scheduleHelperRefresh();
         }, 800);
       });
 
@@ -2276,6 +2923,7 @@
           const activeId = getActiveTemplate();
           saveLayoutFor(activeId);
           showStatus('已刪除模塊並保存。');
+          scheduleHelperRefresh();
         }
       });
 
@@ -2299,6 +2947,42 @@
         insertImgInput.value = '';
       });
 
+      sectionJumpSelect.addEventListener('change', () => {
+        const index = Number(sectionJumpSelect.value);
+        if (Number.isNaN(index) || !sectionTargets[index]) return;
+        sectionTargets[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      collapseToolbarBtn.addEventListener('click', () => {
+        setToolbarCollapsed(true);
+      });
+
+      toolbarHandle.addEventListener('click', () => {
+        setToolbarCollapsed(false);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const isMac = navigator.platform.toUpperCase().includes('MAC');
+        const modKey = isMac ? event.metaKey : event.ctrlKey;
+        if (!modKey) return;
+        const key = event.key.toLowerCase();
+        if (key === 's') {
+          event.preventDefault();
+          const activeId = getActiveTemplate();
+          saveLayoutFor(activeId);
+          updateLastSaved('已手動保存');
+          showStatus('已手動保存到本機（快捷鍵）。');
+        }
+        if (key === 'e') {
+          event.preventDefault();
+          setEditMode(!editMode);
+        }
+        if (key === 'p' && event.shiftKey) {
+          event.preventDefault();
+          setPrintMode(!printMode);
+        }
+      });
+
       window.addEventListener('beforeunload', () => {
         const activeId = getActiveTemplate();
         saveLayoutFor(activeId);
@@ -2318,11 +3002,15 @@
       /* 初始化 */
       loadTheme();
       loadFontSettings();
+      renderStyleThemeButtons();
       const initialTemplate = getActiveTemplate();
       templateSelect.value = initialTemplate;
       setActiveTemplate(initialTemplate, false);
       setEditMode(true);
       setPrintMode(false);
+      scheduleHelperRefresh();
+      const toolbarPreference = localStorage.getItem(KEY_TOOLBAR);
+      setToolbarCollapsed(toolbarPreference === '1');
       setBackendStatus(false, '後端連線中...');
       initBackend();
     });

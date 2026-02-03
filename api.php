@@ -177,6 +177,24 @@ switch ($action) {
         respond(['ok' => true, 'active_version_id' => $nextVersion]);
         break;
 
+    case 'delete_resume':
+        $resumeId = require_param('resume_id');
+        $stmt = $pdo->prepare('SELECT id FROM resumes WHERE id = :id');
+        $stmt->execute([':id' => $resumeId]);
+        if (!$stmt->fetchColumn()) {
+            respond(['error' => 'Resume not found.'], 404);
+        }
+        $pdo->beginTransaction();
+        $stmt = $pdo->prepare('DELETE FROM resume_versions WHERE resume_id = :resume_id');
+        $stmt->execute([':resume_id' => $resumeId]);
+        $stmt = $pdo->prepare('DELETE FROM style_presets WHERE resume_id = :resume_id');
+        $stmt->execute([':resume_id' => $resumeId]);
+        $stmt = $pdo->prepare('DELETE FROM resumes WHERE id = :id');
+        $stmt->execute([':id' => $resumeId]);
+        $pdo->commit();
+        respond(['ok' => true]);
+        break;
+
     case 'list_style_presets':
         $resumeId = require_param('resume_id');
         $stmt = $pdo->prepare(
